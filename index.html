@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>for you - invitation</title>
+  <style>
+    :root {
+      --bg-color: #fcf8f5;
+      --paper-color: #fdfbf7;
+      --envelope-pink: #f4d3d8;
+      --envelope-dark-pink: #e8bdc5;
+      --accent-rose: #a8586c;
+      --text-main: #5a4b4e;
+      --text-light: #8c7b7e;
+      --iris-blue: #9aa5cb;
+      --iris-pink: #f2c2cf;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", serif;
+      background-color: var(--bg-color);
+      background-image: 
+        linear-gradient(90deg, rgba(244, 211, 216, 0.15) 50%, transparent 50%),
+        linear-gradient(rgba(244, 211, 216, 0.15) 50%, transparent 50%);
+      background-size: 20px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--text-main);
+    }
+
+    .viewport {
+      position: relative;
+      width: 100%;
+      max-width: 420px;
+      height: 100%;
+      max-height: 840px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      perspective: 1000px;
+    }
+
+    .envelope-wrapper {
+      position: relative;
+      width: 290px;
+      height: 200px;
+      cursor: pointer;
+      transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+      transform-style: preserve-3d;
+    }
+
+    .envelope-wrapper:hover {
+      transform: translateY(-4px);
+    }
+
+    .envelope {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: var(--envelope-pink);
+      border-radius: 6px;
+      box-shadow: 0 10px 25px rgba(168, 88, 108, 0.12);
+      overflow: visible;
+    }
+
+    .envelope-flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 145px solid transparent;
+      border-right: 145px solid transparent;
+      border-top: 110px solid var(--envelope-dark-pink);
+      transform-origin: top center;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 4;
+    }
+
+    .envelope-pocket {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 145px solid var(--envelope-pink);
+      border-right: 145px solid var(--envelope-pink);
+      border-bottom: 120px solid #ecd0d6;
+      border-radius: 0 0 6px 6px;
+      z-index: 3;
+    }
+
+    .wax-seal {
+      position: absolute;
+      top: 95px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 32px;
+      height: 32px;
+      background: var(--accent-rose);
+      border-radius: 50%;
+      z-index: 5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .wax-seal::after {
+      content: "❀";
+      color: #fdfbf7;
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .iris-branch {
+      position: absolute;
+      right: -25px;
+      top: -30px;
+      width: 70px;
+      height: 110px;
+      z-index: 1;
+      pointer-events: auto;
+      transition: transform 0.3s ease;
+      transform-origin: bottom center;
+    }
+
+    .postmark {
+      position: absolute;
+      bottom: 15px;
+      left: 15px;
+      border: 1px dashed var(--text-light);
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-size: 8px;
+      color: var(--text-light);
+      opacity: 0.6;
+      z-index: 4;
+      transform: rotate(-12deg);
+      user-select: none;
+    }
+
+    .letter {
+      position: absolute;
+      top: 10px;
+      left: 15px;
+      width: 260px;
+      height: 380px;
+      background: var(--paper-color);
+      border-radius: 4px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      z-index: 2;
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(0) scale(0.95);
+      transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease;
+      border: 1px solid rgba(220, 205, 200, 0.4);
+      overflow: hidden;
+    }
+
+    .touch-glare {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle 80px at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.6) 0%, transparent 80%);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .letter-header {
+      font-family: "Georgia", serif;
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--text-light);
+      margin-bottom: 24px;
+      text-transform: uppercase;
+    }
+
+    .letter-to {
+      align-self: flex-start;
+      font-size: 14px;
+      color: var(--text-main);
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+
+    .letter-body {
+      font-size: 13px;
+      line-height: 1.8;
+      color: var(--text-main);
+      margin-bottom: 25px;
+    }
+
+    .letter-body .station {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--accent-rose);
+      display: block;
+      margin: 6px 0;
+      letter-spacing: 1px;
+    }
+
+    .letter-date {
+      margin-top: auto;
+      font-family: "Georgia", serif;
+      font-size: 22px;
+      color: var(--accent-rose);
+      letter-spacing: 1px;
+    }
+    .letter-date sub {
+      font-size: 10px;
+      display: block;
+      color: var(--text-light);
+      margin-top: -2px;
+    }
+
+    .letter-footer {
+      margin-top: 15px;
+      font-size: 12px;
+      color: var(--text-light);
+    }
+    .letter-signature {
+      font-size: 13px;
+      color: var(--text-main);
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    .see-you-soon {
+      margin-top: 18px;
+      font-family: "Georgia", serif;
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      color: var(--text-light);
+      opacity: 0.5;
+      cursor: pointer;
+      transition: opacity 0.3s ease;
+    }
+    .see-you-soon:hover {
+      opacity: 0.9;
+    }
+
+    .hint-text {
+      position: absolute;
+      bottom: 12%;
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--text-light);
+      text-align: center;
+      transition: opacity 0.5s ease;
+    }
+
+    .is-open .envelope-flap {
+      transform: rotateX(180deg);
+      z-index: 1;
+    }
+    .is-open .wax-seal {
+      opacity: 0;
+      transform: translateX(-50%) scale(0.5);
+    }
+    .is-open .letter {
+      opacity: 1;
+      transform: translateY(-120px) scale(1);
+      z-index: 10;
+    }
+
+    .petal {
+      position: absolute;
+      width: 12px;
+      height: 18px;
+      background: var(--iris-pink);
+      border-radius: 50% 0 50% 50%;
+      opacity: 0.85;
+      pointer-events: auto;
+      cursor: pointer;
+      transition: transform 0.5s ease, opacity 0.5s ease;
+      z-index: 12;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="viewport">
+    <div class="envelope-wrapper" id="envelopeWrapper">
+      <svg class="iris-branch" id="irisFlower" viewBox="0 0 100 150">
+        <path d="M 50,140 Q 45,90 55,40" stroke="#8fa382" stroke-width="3" fill="none"/>
+        <path d="M 55,40 C 35,20 20,45 45,55 C 55,30 75,25 55,40 Z" fill="#e8bed1" opacity="0.9"/>
+        <path d="M 55,40 C 75,20 90,45 65,55 C 55,30 35,25 55,40 Z" fill="#b1bce0" opacity="0.8"/>
+        <path d="M 55,40 C 40,65 70,65 55,40 Z" fill="#d8a7be" opacity="0.95"/>
+      </svg>
+
+      <div class="envelope">
+        <div class="envelope-flap"></div>
+        <div class="wax-seal"></div>
+        <div class="envelope-pocket"></div>
+        
+        <div class="postmark" id="postmark">
+          <span>IRIS</span>
+          <span>09·30</span>
+        </div>
+      </div>
+
+      <div class="letter" id="letter">
+        <div class="touch-glare" id="touchGlare"></div>
+
+        <div class="letter-header">I N V I T A T I O N</div>
+        
+        <div class="letter-to">To 陈萱莹：</div>
+
+        <div class="letter-body">
+          诚邀 IRIS 花花来到
+          <span class="station">蒲晶小站</span>
+          一起逛逛吃吃玩玩 ♡
+        </div>
+
+        <div class="letter-date">
+          09.30
+          <sub>2026</sub>
+        </div>
+
+        <div class="letter-footer">
+          期待见到你！
+          <div class="letter-signature">小蒲晶晶</div>
+        </div>
+
+        <div class="see-you-soon" id="seeYouSoon">See you soon</div>
+      </div>
+    </div>
+
+    <div class="hint-text" id="hintText">
+      FOR YOU<br>
+      <span style="font-size: 9px; opacity: 0.7; margin-top: 4px; display: inline-block;">点击打开</span>
+    </div>
+  </div>
+
+  <script>
+    const envelopeWrapper = document.getElementById('envelopeWrapper');
+    const letter = document.getElementById('letter');
+    const hintText = document.getElementById('hintText');
+    const irisFlower = document.getElementById('irisFlower');
+    const postmark = document.getElementById('postmark');
+    const touchGlare = document.getElementById('touchGlare');
+    const seeYouSoon = document.getElementById('seeYouSoon');
+
+    let isOpen = false;
+    let flowerClickCount = 0;
+
+    envelopeWrapper.addEventListener('click', (e) => {
+      if (e.target.closest('#postmark') || e.target.closest('#irisFlower') || e.target.closest('#seeYouSoon')) return;
+
+      if (!isOpen) {
+        isOpen = true;
+        envelopeWrapper.classList.add('is-open');
+        hintText.style.opacity = '0';
+        setTimeout(dropPetal, 1200);
+      }
+    });
+
+    irisFlower.addEventListener('click', (e) => {
+      e.stopPropagation();
+      flowerClickCount++;
+
+      if (flowerClickCount === 1) {
+        irisFlower.style.transform = 'rotate(8deg)';
+        setTimeout(() => irisFlower.style.transform = 'rotate(0deg)', 400);
+      } else if (flowerClickCount >= 2) {
+        dropPetal();
+      }
+    });
+
+    function dropPetal() {
+      const petal = document.createElement('div');
+      petal.className = 'petal';
+      petal.style.left = (180 + Math.random() * 40) + 'px';
+      petal.style.top = '20px';
+      envelopeWrapper.appendChild(petal);
+
+      requestAnimationFrame(() => {
+        petal.style.transform = `translate(${Math.random() * 20 - 10}px, ${160 + Math.random() * 30}px) rotate(${Math.random() * 90}deg)`;
+      });
+
+      petal.addEventListener('click', (e) => {
+        e.stopPropagation();
+        petal.style.transform += ' scale(1.3) rotateY(180deg)';
+        petal.style.background = '#d8a7be';
+        
+        const msg = document.createElement('span');
+        msg.innerText = '送给花花 ♡';
+        msg.style.position = 'absolute';
+        msg.style.fontSize = '9px';
+        msg.style.color = '#a8586c';
+        msg.style.top = '-15px';
+        msg.style.left = '-10px';
+        msg.style.whiteSpace = 'nowrap';
+        petal.appendChild(msg);
+
+        setTimeout(() => {
+          petal.style.opacity = '0';
+          setTimeout(() => petal.remove(), 500);
+        }, 1500);
+      });
+    }
+
+    postmark.addEventListener('click', (e) => {
+      e.stopPropagation();
+      postmark.style.transform = 'rotate(-12deg) scale(0.9)';
+      const originalText = postmark.innerHTML;
+      postmark.innerHTML = '<span style="color:#a8586c">for 花花</span>';
+      
+      setTimeout(() => {
+        postmark.style.transform = 'rotate(-12deg) scale(1)';
+        setTimeout(() => {
+          postmark.innerHTML = originalText;
+        }, 1200);
+      }, 200);
+    });
+
+    function handleMove(x, y) {
+      if (!isOpen) return;
+      const rect = letter.getBoundingClientRect();
+      const mouseX = ((x - rect.left) / rect.width) * 100;
+      const mouseY = ((y - rect.top) / rect.height) * 100;
+      
+      touchGlare.style.setProperty('--mouse-x', `${mouseX}%`);
+      touchGlare.style.setProperty('--mouse-y', `${mouseY}%`);
+      touchGlare.style.opacity = '1';
+    }
+
+    letter.addEventListener('mousemove', (e) => handleMove(e.clientX, e.clientY));
+    letter.addEventListener('touchmove', (e) => {
+      if (e.touches.length > 0) {
+        handleMove(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    });
+    letter.addEventListener('mouseleave', () => touchGlare.style.opacity = '0');
+    letter.addEventListener('touchend', () => touchGlare.style.opacity = '0');
+
+    seeYouSoon.addEventListener('click', (e) => {
+      e.stopPropagation();
+      
+      letter.style.transform = 'translateY(0) scale(0.95)';
+      letter.style.opacity = '0';
+      
+      setTimeout(() => {
+        envelopeWrapper.classList.remove('is-open');
+        hintText.innerHTML = '9月30日见 ♡';
+        hintText.style.opacity = '1';
+        isOpen = false;
+      }, 600);
+    });
+  </script>
+</body>
+</html>
