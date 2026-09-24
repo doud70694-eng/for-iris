@@ -2,31 +2,19 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>致陈萱莹的邀请函</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@300;400;600&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>An Invitation For You</title>
   <style>
-    /* ==========================================================================
-       1. VARIABLES & RESET
-       ========================================================================== */
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC:wght@300;400;600&display=swap');
+
     :root {
-      --bg-top: #eef5fc;
-      --bg-mid: #fbf9f6;
-      --bg-bot: #f2edf7;
-      
-      --paper-base: #fcfbf9;
-      --paper-texture: #f5f0eb;
-      
-      --sky-blue: #dce8f5;
-      --powder-blue: #b8cde3;
-      --soft-violet: #a8a3c9;
-      --pale-pink: #f7e6ec;
-      --ink-gray: #5a626c;
-      --ink-light: #8c96a3;
-      --stamp-ink: #828e9e;
-      --gold-subtle: #e8dbb7;
+      --bg-color: #FAF6F3;
+      --pink-grid: rgba(238, 201, 206, 0.25);
+      --card-bg: #FCFAf7;
+      --text-main: #4A3E3D;
+      --text-accent: #9E4B4B;
+      --envelope-pink: #F5E3E5;
+      --envelope-inner: #EAD5D8;
     }
 
     * {
@@ -36,1049 +24,298 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    html, body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
+    body {
+      background-color: var(--bg-color);
+      background-image: 
+        linear-gradient(var(--pink-grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--pink-grid) 1px, transparent 1px);
+      background-size: 16px 16px;
       font-family: 'Noto Serif SC', serif;
-      background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 50%, var(--bg-bot) 100%);
-      color: var(--ink-gray);
-      user-select: none;
-      -webkit-user-select: none;
-    }
-
-    /* ==========================================================================
-       2. BACKGROUND & AMBIENT
-       ========================================================================== */
-    .viewport {
-      position: relative;
-      width: 100%;
-      height: 100%;
+      color: var(--text-main);
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
+      overflow: hidden;
+    }
+
+    /* Scene Container */
+    .viewport {
+      width: 100%;
+      max-width: 430px;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
       perspective: 1000px;
     }
 
-    /* Canvas for floating stars and particles */
-    #ambient-canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-      pointer-events: auto;
-    }
-
-    /* Soft sheen overlay on mouse movement */
-    .light-glimmer {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(circle 300px at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.4), transparent 80%);
-      pointer-events: none;
-      z-index: 2;
-      opacity: 0.6;
-      transition: opacity 0.5s ease;
-    }
-
-    /* Floating petals container */
-    #petals-container {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 20;
-    }
-
-    .falling-petal {
-      position: absolute;
-      width: 14px;
-      height: 22px;
-      background: radial-gradient(circle at 30% 30%, #ffffff, var(--pale-pink) 70%, var(--powder-blue) 100%);
-      border-radius: 80% 10% 80% 50%;
-      opacity: 0.85;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
-      filter: blur(0.2px);
-      pointer-events: none;
-      animation: floatDown 6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-    }
-
-    @keyframes floatDown {
-      0% {
-        transform: translate(0, 0) rotate(0deg) scale(1);
-        opacity: 0.9;
-      }
-      50% {
-        transform: translate(30px, 180px) rotate(120deg) scale(0.9);
-      }
-      100% {
-        transform: translate(-10px, 400px) rotate(240deg) scale(0.7);
-        opacity: 0;
-      }
-    }
-
-    /* ==========================================================================
-       3. ENVELOPE STYLES (STAGE 1)
-       ========================================================================== */
-    .scene-container {
+    /* Envelope Styles */
+    .envelope-wrapper {
       position: relative;
-      width: 320px;
-      height: 480px;
-      z-index: 5;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .envelope-box {
-      position: absolute;
-      width: 290px;
-      height: 200px;
+      width: 280px;
+      height: 190px;
+      background: var(--envelope-pink);
+      border-radius: 4px;
+      box-shadow: 0 12px 28px rgba(120, 90, 95, 0.12);
       cursor: pointer;
-      transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.27);
+      transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+      transform-style: preserve-3d;
     }
 
-    .envelope-box:hover {
-      transform: translateY(-4px) rotate(0.5deg);
+    .envelope-wrapper.lift {
+      transform: scale(1.03) translateY(-10px);
     }
 
-    /* Envelope Base Body */
-    .envelope {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      background-color: var(--paper-base);
-      background-image: 
-        radial-gradient(var(--powder-blue) 0.5px, transparent 0.5px),
-        linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(230,238,248,0.3) 100%);
-      background-size: 12px 12px, 100% 100%;
-      border-radius: 4px;
-      box-shadow: 
-        0 12px 35px -8px rgba(160, 175, 200, 0.3),
-        0 4px 12px rgba(0, 0, 0, 0.03),
-        inset 0 0 0 1px rgba(255, 255, 255, 0.9);
-      overflow: visible;
-    }
-
-    /* Folds & Flaps */
-    .envelope-back {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: #f4f2ee;
-      border-radius: 4px;
-    }
-
-    /* Top Flap */
+    /* Envelope Flap Top */
     .flap-top {
       position: absolute;
       top: 0;
       left: 0;
       width: 0;
       height: 0;
-      border-left: 145px solid transparent;
-      border-right: 145px solid transparent;
-      border-top: 110px solid #f2ede4;
+      border-left: 140px solid transparent;
+      border-right: 140px solid transparent;
+      border-top: 105px solid var(--envelope-pink);
       transform-origin: top center;
-      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.2s;
-      z-index: 5;
+      transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 4;
       filter: drop-shadow(0 2px 3px rgba(0,0,0,0.05));
     }
 
-    .flap-top::after {
-      content: '';
-      position: absolute;
-      top: -110px;
-      left: -145px;
-      width: 0;
-      height: 0;
-      border-left: 145px solid transparent;
-      border-right: 145px solid transparent;
-      border-top: 108px solid var(--paper-base);
-    }
-
-    /* Side & Bottom Pocket Flaps */
-    .pocket-left {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 0;
-      border-bottom: 200px solid #e8f0f8;
-      border-right: 145px solid transparent;
-      z-index: 3;
-      opacity: 0.9;
-    }
-
-    .pocket-right {
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      width: 0;
-      height: 0;
-      border-bottom: 200px solid #e2ebf5;
-      border-left: 145px solid transparent;
-      z-index: 3;
-      opacity: 0.9;
-    }
-
-    .pocket-bottom {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 0;
-      border-left: 145px solid transparent;
-      border-right: 145px solid transparent;
-      border-bottom: 105px solid #f6f3ed;
-      z-index: 4;
-    }
-
-    /* Washi Tape Accent */
-    .washi-tape {
-      position: absolute;
-      top: -12px;
-      right: 25px;
-      width: 55px;
-      height: 22px;
-      background: rgba(220, 232, 245, 0.65);
-      border-left: 2px dashed rgba(255, 255, 255, 0.8);
-      border-right: 2px dashed rgba(255, 255, 255, 0.8);
-      transform: rotate(-4deg);
-      z-index: 6;
-      backdrop-filter: blur(1px);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    .envelope-wrapper.open .flap-top {
+      transform: rotateX(180deg);
+      z-index: 1;
     }
 
     /* Wax Seal */
     .wax-seal {
       position: absolute;
-      top: 100px;
-      left: 145px;
+      top: 90px;
+      left: 50%;
       transform: translate(-50%, -50%);
-      width: 42px;
-      height: 42px;
-      background: radial-gradient(circle at 30% 30%, #fbf9f5, var(--powder-blue) 80%, var(--soft-violet) 100%);
+      width: 44px;
+      height: 44px;
+      background: #E8B4B8;
       border-radius: 50%;
-      z-index: 6;
-      box-shadow: 
-        0 4px 10px rgba(130, 140, 160, 0.25),
-        inset 0 1px 2px rgba(255,255,255,0.8),
-        inset 0 -2px 4px rgba(0,0,0,0.05);
+      box-shadow: inset -2px -2px 4px rgba(0,0,0,0.15), inset 2px 2px 4px rgba(255,255,255,0.6), 0 4px 8px rgba(120, 80, 85, 0.15);
       display: flex;
       justify-content: center;
       align-items: center;
-      cursor: pointer;
-      transition: transform 0.3s ease, opacity 0.5s ease;
+      z-index: 5;
+      transition: opacity 0.4s ease, transform 0.4s ease;
     }
 
-    .wax-seal::before {
-      content: '';
+    .wax-seal::after {
+      content: '🎀';
+      font-size: 18px;
+      opacity: 0.8;
+    }
+
+    .envelope-wrapper.open .wax-seal {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.8);
+      pointer-events: none;
+    }
+
+    /* Envelope Bottom & Sides Pocket */
+    .pocket {
       position: absolute;
-      width: 32px;
-      height: 32px;
-      border: 1px dashed rgba(255, 255, 255, 0.7);
-      border-radius: 50%;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+      clip-path: polygon(0 0, 140px 95px, 280px 0, 280px 190px, 0 190px);
+      background-color: var(--envelope-pink);
+      border-radius: 0 0 4px 4px;
+      z-index: 3;
     }
 
-    .wax-seal-icon {
-      font-size: 14px;
-      color: #6c7a8c;
-      font-family: 'Caveat', cursive;
-      font-weight: 600;
-    }
-
-    /* Hint text below envelope */
-    .open-hint {
+    /* Envelope Hints */
+    .hint-text {
       position: absolute;
-      bottom: -45px;
+      bottom: -60px;
       width: 100%;
       text-align: center;
-      font-size: 12px;
-      color: var(--ink-light);
+      font-family: 'Cormorant Garamond', serif;
+      transition: opacity 0.5s ease;
+    }
+
+    .hint-text .sub {
+      font-size: 16px;
       letter-spacing: 2px;
-      font-weight: 300;
-      opacity: 0.8;
-      animation: pulseText 2.5s infinite ease-in-out;
-      pointer-events: none;
+      color: var(--text-main);
     }
 
-    @keyframes pulseText {
-      0%, 100% { opacity: 0.4; transform: translateY(0); }
-      50% { opacity: 0.9; transform: translateY(-2px); }
-    }
-
-    /* ==========================================================================
-       4. LETTER / INVITATION CARD STYLES (STAGE 2)
-       ========================================================================== */
-    .letter-paper {
-      position: absolute;
-      width: 300px;
-      height: 430px;
-      background-color: var(--paper-base);
-      /* Subtle noise/texture via gradients */
-      background-image: 
-        radial-gradient(rgba(184, 205, 227, 0.12) 1px, transparent 0),
-        linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(250,247,242,0.6));
-      background-size: 10px 10px, 100% 100%;
-      border-radius: 2px;
-      padding: 28px 24px 20px 24px;
-      box-shadow: 
-        0 10px 30px rgba(160, 175, 195, 0.25),
-        0 2px 6px rgba(0, 0, 0, 0.02),
-        inset 0 0 40px rgba(245, 235, 225, 0.3);
-      z-index: 2;
-      opacity: 0;
-      transform: translateY(30px) scale(0.92) rotate(-1deg);
-      transition: 
-        transform 1.2s cubic-bezier(0.16, 1, 0.3, 1),
-        opacity 0.8s ease,
-        box-shadow 0.5s ease;
-      pointer-events: none;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      border: 1px solid rgba(255, 255, 255, 0.8);
-      overflow: hidden;
-    }
-
-    /* Slightly deckled/torn edge feel using pseudo element */
-    .letter-paper::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      border: 1px solid rgba(184, 205, 227, 0.25);
-      margin: 6px;
-      pointer-events: none;
-      border-radius: 1px;
-    }
-
-    /* Gentle washi tape on letter top */
-    .letter-tape {
-      position: absolute;
-      top: -8px;
-      left: 50%;
-      transform: translateX(-50%) rotate(1deg);
-      width: 60px;
-      height: 18px;
-      background: rgba(247, 230, 236, 0.7);
-      border-left: 2px dashed rgba(255,255,255,0.9);
-      border-right: 2px dashed rgba(255,255,255,0.9);
-      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
-    }
-
-    /* Content Area */
-    .letter-content {
-      position: relative;
-      z-index: 2;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* Header Greeting */
-    .salutation {
-      font-family: 'Noto Serif SC', serif;
-      font-size: 15px;
-      font-weight: 600;
-      color: #4a5563;
-      letter-spacing: 1px;
-      margin-top: 6px;
-      margin-bottom: 22px;
-      position: relative;
-      display: inline-block;
-    }
-
-    /* Main Invitation Text */
-    .body-text {
-      font-family: 'Noto Serif SC', serif;
-      font-size: 14.5px;
-      line-height: 1.9;
-      color: #525d6b;
-      letter-spacing: 1.2px;
-      font-weight: 400;
-    }
-
-    .station-highlight {
-      font-size: 17px;
-      font-weight: 600;
-      color: #3b4654;
-      display: inline-block;
-      margin: 6px 0;
-      position: relative;
-      letter-spacing: 1.5px;
-      transform: rotate(-0.5deg);
-    }
-
-    .station-highlight::after {
-      content: '';
-      position: absolute;
-      bottom: 1px;
-      left: -2px;
-      width: 105%;
-      height: 6px;
-      background: rgba(220, 232, 245, 0.5);
-      z-index: -1;
-      border-radius: 3px;
-    }
-
-    .heart-symbol {
-      display: inline-block;
-      font-size: 12px;
-      color: var(--soft-violet);
-      margin-left: 2px;
-      transform: translateY(-1px);
-    }
-
-    /* Date & Signoff Block */
-    .footer-block {
-      margin-top: auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      padding-bottom: 8px;
-    }
-
-    .date-badge {
-      cursor: pointer;
-      padding: 4px 6px;
-      border-radius: 4px;
-      transition: background 0.3s ease;
-    }
-
-    .date-badge:hover {
-      background: rgba(220, 232, 245, 0.3);
-    }
-
-    .date-main {
-      font-family: 'Caveat', cursive;
-      font-size: 24px;
-      font-weight: 600;
-      color: #4b5869;
-      line-height: 1;
-      letter-spacing: 1px;
-    }
-
-    .date-year {
-      font-family: 'Caveat', cursive;
-      font-size: 14px;
-      color: var(--ink-light);
-      line-height: 1;
-      margin-top: 2px;
-      padding-left: 1px;
-    }
-
-    .signature {
-      font-family: 'Noto Serif SC', serif;
-      font-size: 14px;
-      color: #4a5563;
-      letter-spacing: 1.5px;
-      font-weight: 400;
-      text-align: right;
-      padding-bottom: 2px;
-    }
-
-    /* ==========================================================================
-       5. HAND-DRAWN IRIS FLOWER (SVG + CANVAS WATERCOLOR LOOK)
-       ========================================================================== */
-    .iris-container {
-      position: absolute;
-      bottom: -10px;
-      left: -15px;
-      width: 140px;
-      height: 190px;
-      z-index: 3;
-      cursor: pointer;
-      pointer-events: auto;
-      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.27);
-    }
-
-    .iris-container:hover {
-      transform: scale(1.02) rotate(1deg);
-    }
-
-    .iris-svg {
-      width: 100%;
-      height: 100%;
-      filter: drop-shadow(1px 2px 4px rgba(160, 175, 195, 0.15));
-    }
-
-    .botanical-tag {
-      position: absolute;
-      bottom: 22px;
-      left: 85px;
-      font-family: 'Caveat', cursive;
+    .hint-text .cn {
       font-size: 11px;
-      color: #9aa5b3;
-      letter-spacing: 0.5px;
-      transform: rotate(-4deg);
-      white-space: nowrap;
-      pointer-events: none;
-      opacity: 0.85;
-    }
-
-    /* ==========================================================================
-       6. VINTAGE POSTMARK STAMP
-       ========================================================================== */
-    .postmark {
-      position: absolute;
-      top: 22px;
-      right: 18px;
-      width: 68px;
-      height: 68px;
-      border-radius: 50%;
-      border: 1px dashed var(--stamp-ink);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      transform: rotate(-6deg);
-      cursor: pointer;
-      opacity: 0.65;
-      transition: transform 0.2s ease, opacity 0.3s ease;
-      z-index: 4;
-      background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 70%);
-    }
-
-    .postmark::before {
-      content: '';
-      position: absolute;
-      width: 60px;
-      height: 60px;
-      border: 1px solid var(--stamp-ink);
-      border-radius: 50%;
-    }
-
-    .postmark-text-top {
-      font-family: 'Caveat', cursive;
-      font-size: 10px;
-      color: var(--stamp-ink);
+      color: #998888;
+      margin-top: 4px;
       letter-spacing: 1px;
-      font-weight: 600;
-      margin-bottom: -1px;
     }
 
-    .postmark-date {
-      font-size: 9px;
-      color: var(--stamp-ink);
-      letter-spacing: 0.5px;
-      border-top: 0.5px solid var(--stamp-ink);
-      border-bottom: 0.5px solid var(--stamp-ink);
-      padding: 1px 4px;
-      margin: 1px 0;
-      font-family: monospace;
+    .envelope-wrapper.open ~ .hint-text {
+      opacity: 0;
     }
 
-    .postmark-sub {
-      font-size: 8px;
-      color: var(--stamp-ink);
-      letter-spacing: 0.5px;
-    }
-
-    .postmark:active {
-      transform: scale(0.95) rotate(-6deg);
-    }
-
-    /* Dynamic stamp secret text overlay */
-    .stamp-secret {
+    /* Letter Card */
+    .letter-card {
       position: absolute;
-      top: 48px;
-      right: 22px;
-      font-family: 'Caveat', cursive;
-      font-size: 13px;
-      color: var(--soft-violet);
-      opacity: 0;
-      transform: translateY(-3px);
-      transition: opacity 0.4s ease, transform 0.4s ease;
-      pointer-events: none;
-      z-index: 5;
-      font-weight: 600;
-    }
-
-    .stamp-secret.show {
-      opacity: 1;
+      top: 10px;
+      left: 15px;
+      width: 250px;
+      min-height: 360px;
+      background: var(--card-bg);
+      background-image: repeating-linear-gradient(var(--card-bg) 0px, var(--card-bg) 23px, #E8DFDC 24px);
+      border-radius: 2px;
+      padding: 30px 20px 25px 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+      z-index: 2;
+      transition: transform 0.8s cubic-bezier(0.25, 1, 0.3, 1), opacity 0.6s ease;
       transform: translateY(0);
-    }
-
-    /* ==========================================================================
-       7. RESET / REPLAY BUTTON
-       ========================================================================== */
-    .reset-btn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.6);
-      border: 1px solid rgba(184, 205, 227, 0.4);
-      color: var(--ink-light);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 12px;
-      cursor: pointer;
-      opacity: 0.3;
-      transition: opacity 0.3s ease, transform 0.3s ease;
-      z-index: 30;
-      backdrop-filter: blur(2px);
-    }
-
-    .reset-btn:hover {
-      opacity: 0.8;
-      transform: rotate(90deg);
-    }
-
-    /* ==========================================================================
-       8. ANIMATION STATE CLASSES
-       ========================================================================== */
-    /* Step 1: Flap Opens */
-    .envelope-box.open .flap-top {
-      transform: rotateX(180deg);
-      z-index: 1;
-    }
-
-    .envelope-box.open .wax-seal {
       opacity: 0;
-      pointer-events: none;
+      border: 1px solid #EFEAE6;
     }
 
-    .envelope-box.open .open-hint {
-      opacity: 0;
+    /* Handcrafted Details on Card */
+    .clip {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 32px;
+      height: 16px;
+      background: #F1C3C8;
+      border-radius: 3px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
-    /* Step 2: Letter emerges and expands */
-    .scene-container.opened .letter-paper {
+    .iris-flower {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      font-size: 22px;
+      opacity: 0.7;
+    }
+
+    .card-header {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-align: center;
+      color: #A09090;
+      margin-bottom: 24px;
+    }
+
+    .card-body {
+      font-size: 13.5px;
+      line-height: 1.9;
+      color: var(--text-main);
+      font-weight: 400;
+    }
+
+    .card-body p {
+      margin-bottom: 12px;
+    }
+
+    .station-title {
+      font-weight: 600;
+      color: var(--text-accent);
+      font-size: 15px;
+    }
+
+    .card-footer {
+      margin-top: 28px;
+      text-align: right;
+      font-size: 13px;
+    }
+
+    .card-footer .author {
+      font-weight: 600;
+      color: var(--text-accent);
+      margin-top: 4px;
+    }
+
+    /* Animation Steps when Opened */
+    .envelope-wrapper.extracted .letter-card {
       opacity: 1;
-      transform: translateY(-20px) scale(1) rotate(0deg);
-      pointer-events: auto;
-      z-index: 10;
-      box-shadow: 
-        0 15px 45px rgba(150, 165, 185, 0.3),
-        0 3px 10px rgba(0, 0, 0, 0.03);
+      transform: translateY(-210px) scale(0.95);
+      z-index: 6;
     }
 
-    .scene-container.opened .envelope-box {
-      transform: translateY(180px) scale(0.9);
+    .envelope-wrapper.expanded .letter-card {
+      transform: translateY(-80px) scale(1.18);
+      box-shadow: 0 20px 40px rgba(100, 70, 75, 0.15);
+    }
+
+    .envelope-wrapper.expanded {
+      transform: translateY(120px) scale(0.85);
       opacity: 0.4;
-      pointer-events: none;
-      transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1), opacity 1s ease;
-    }
-
-    /* Gentle swaying effect on flower click */
-    @keyframes flowerSway {
-      0% { transform: rotate(0deg); }
-      30% { transform: rotate(-4deg); }
-      60% { transform: rotate(3deg); }
-      100% { transform: rotate(0deg); }
-    }
-
-    .sway-animation {
-      animation: flowerSway 0.8s ease-in-out;
-    }
-
-    /* Mobile Fine-Tuning */
-    @media (max-height: 600px) {
-      .scene-container {
-        transform: scale(0.88);
-      }
+      filter: blur(1px);
     }
   </style>
 </head>
 <body>
 
   <div class="viewport">
-    <!-- Background Canvas for ambient stars & powder -->
-    <canvas id="ambient-canvas"></canvas>
-    
-    <!-- Light Glimmer Follower -->
-    <div class="light-glimmer" id="glimmer"></div>
-
-    <!-- Falling Petals Layer -->
-    <div id="petals-container"></div>
-
-    <!-- Main Scene Container -->
-    <div class="scene-container" id="sceneContainer">
+    <div class="envelope-wrapper" id="envelope">
+      <div class="flap-top"></div>
+      <div class="wax-seal"></div>
+      <div class="pocket"></div>
       
-      <!-- ENVELOPE (INITIAL STATE) -->
-      <div class="envelope-box" id="envelopeBox" onclick="openEnvelope()">
-        <div class="envelope">
-          <div class="envelope-back"></div>
-          <div class="pocket-left"></div>
-          <div class="pocket-right"></div>
-          <div class="pocket-bottom"></div>
-          <div class="washi-tape"></div>
-          <div class="flap-top"></div>
-          <div class="wax-seal">
-            <span class="wax-seal-icon">P</span>
-          </div>
+      <!-- Inside Card -->
+      <div class="letter-card" id="card">
+        <div class="clip"></div>
+        <div class="iris-flower">🪻</div>
+        <div class="card-header">I N V I T A T I O N</div>
+        <div class="card-body">
+          <p>To 陈萱莹：</p>
+          <p>诚邀 <strong>IRIS</strong> 花花来到<span class="station-title">蒲晶小站</span></p>
+          <p>一起逛逛吃吃玩玩 ♡</p>
+          <p style="margin-top: 18px; font-size: 12.5px; color: #7A6B6B;">日期：2026年9月30日</p>
         </div>
-        <div class="open-hint">轻触信封 · 开启记忆</div>
+        <div class="card-footer">
+          <div>期待见到你！</div>
+          <div class="author">小蒲晶晶</div>
+        </div>
       </div>
-
-      <!-- INVITATION LETTER (EMERGES ON OPEN) -->
-      <div class="letter-paper" id="letterPaper">
-        <div class="letter-tape"></div>
-        
-        <!-- Postmark Stamp (Interactive 3) -->
-        <div class="postmark" onclick="triggerStamp(event)">
-          <span class="postmark-text-top">IRIS STATION</span>
-          <span class="postmark-date">09 · 30</span>
-          <span class="postmark-sub">2026</span>
-        </div>
-        <div class="stamp-secret" id="stampSecret">for 花花</div>
-
-        <!-- Main Text Content -->
-        <div class="letter-content">
-          <div class="salutation">To 陈萱莹：</div>
-          
-          <div class="body-text">
-            诚邀 <span style="font-weight:600; color:#3d4856;">IRIS 花花</span> 来到<br>
-            <span class="station-highlight">蒲晶小站</span><br>
-            一起逛逛吃吃玩玩 <span class="heart-symbol">♡</span>
-          </div>
-
-          <div class="footer-block">
-            <!-- Interactive Date (Interactive 4) -->
-            <div class="date-badge" onclick="triggerDate(this)">
-              <div class="date-main" id="dateText">09.30</div>
-              <div class="date-year">2026</div>
-            </div>
-
-            <div class="signature">
-              小蒲晶晶
-            </div>
-          </div>
-        </div>
-
-        <!-- Botanical Iris Illustration (Interactive 2) -->
-        <div class="iris-container" id="irisContainer" onclick="triggerIris(event)">
-          <!-- Hand-drawn style Botanical Iris SVG -->
-          <svg class="iris-svg" viewBox="0 0 160 220" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <!-- Watercolor Soft Gradients -->
-              <linearGradient id="stemGrad" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stop-color="#a3b899" />
-                <stop offset="100%" stop-color="#8ba380" />
-              </linearGradient>
-              
-              <radialGradient id="petalGrad1" cx="40%" cy="40%" r="60%">
-                <stop offset="0%" stop-color="#ffffff" />
-                <stop offset="65%" stop-color="#fcedf2" />
-                <stop offset="100%" stop-color="#dce6f2" />
-              </radialGradient>
-
-              <radialGradient id="petalGrad2" cx="50%" cy="30%" r="70%">
-                <stop offset="0%" stop-color="#ffffff" />
-                <stop offset="50%" stop-color="#f8e5ee" />
-                <stop offset="90%" stop-color="#c8d7e8" />
-                <stop offset="100%" stop-color="#b0c2d8" />
-              </radialGradient>
-
-              <linearGradient id="centerYellow" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#fef3cd" />
-                <stop offset="100%" stop-color="#f5e1a4" />
-              </linearGradient>
-            </defs>
-
-            <!-- Stem & Leaves with pencil line quality -->
-            <path d="M 65 210 Q 70 140 62 85" stroke="url(#stemGrad)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-            <path d="M 65 210 Q 75 160 95 120" stroke="url(#stemGrad)" stroke-width="2" stroke-linecap="round" fill="none"/>
-            <path d="M 64 170 Q 40 140 30 100" stroke="#9bb093" stroke-width="1.8" stroke-linecap="round" fill="none"/>
-
-            <!-- Fine botanical leaf veins -->
-            <path d="M 66 190 Q 80 150 92 125" stroke="#7a9470" stroke-width="0.6" stroke-dasharray="2 1" fill="none" opacity="0.6"/>
-
-            <!-- Small Side Bud -->
-            <g transform="translate(25, 90) rotate(-15)">
-              <path d="M 10 15 C 5 5, 10 -5, 15 -10 C 20 -5, 25 5, 20 15 Z" fill="url(#petalGrad1)" stroke="#8e9bb0" stroke-width="0.5"/>
-              <path d="M 8 20 C 8 12, 12 10, 15 8 C 18 10, 22 12, 22 20 Z" fill="#9bb093" opacity="0.8"/>
-            </g>
-
-            <!-- Main Iris Flower (White & Pale Pink Watercolor Style) -->
-            <g transform="translate(30, 10)">
-              <!-- Back Petal (Top Standard) -->
-              <path d="M 32 65 C 15 45, 12 20, 32 5 C 52 20, 49 45, 32 65 Z" 
-                    fill="url(#petalGrad1)" stroke="#8c97a8" stroke-width="0.6" opacity="0.95"/>
-              <path d="M 32 55 Q 32 25 32 10" stroke="#c4b2c6" stroke-width="0.5" stroke-dasharray="1 2" fill="none"/>
-
-              <!-- Left Fall Petal -->
-              <path d="M 28 62 C 10 65, -5 80, 5 105 C 20 115, 32 95, 34 68 Z" 
-                    fill="url(#petalGrad2)" stroke="#8a95a5" stroke-width="0.6"/>
-              <!-- Yellow Beard Accent -->
-              <path d="M 25 68 C 18 75, 12 82, 14 88" stroke="url(#centerYellow)" stroke-width="2" stroke-linecap="round" fill="none"/>
-
-              <!-- Right Fall Petal -->
-              <path d="M 36 62 C 54 65, 69 80, 59 105 C 44 115, 32 95, 30 68 Z" 
-                    fill="url(#petalGrad2)" stroke="#8a95a5" stroke-width="0.6"/>
-              <!-- Yellow Beard Accent -->
-              <path d="M 39 68 C 46 75, 52 82, 50 88" stroke="url(#centerYellow)" stroke-width="2" stroke-linecap="round" fill="none"/>
-
-              <!-- Center Petal / Style Arms -->
-              <path d="M 28 60 C 24 45, 28 35, 32 38 C 36 35, 40 45, 36 60 Z" 
-                    fill="#ffffff" stroke="#9aa5b5" stroke-width="0.5" opacity="0.9"/>
-              
-              <!-- Subtle penciled details -->
-              <path d="M 32 62 Q 22 80 18 95" stroke="#b8a6be" stroke-width="0.4" fill="none" opacity="0.7"/>
-              <path d="M 32 62 Q 42 80 46 95" stroke="#b8a6be" stroke-width="0.4" fill="none" opacity="0.7"/>
-            </g>
-          </svg>
-          <div class="botanical-tag">Iris germanica</div>
-        </div>
-
-      </div>
-
     </div>
 
-    <!-- Soft Reset Button (Interactive 7) -->
-    <div class="reset-btn" id="resetBtn" onclick="resetScene()" title="重置信封">↻</div>
+    <div class="hint-text">
+      <div class="sub">for you</div>
+      <div class="cn">tap to open / 点击打开</div>
+    </div>
   </div>
 
   <script>
-    /* ==========================================================================
-       BACKGROUND CANVAS: AMBIENT STARS & SOFT DUST
-       ========================================================================== */
-    const canvas = document.getElementById('ambient-canvas');
-    const ctx = canvas.getContext('2d');
-    let width, height;
-    let stars = [];
+    const envelope = document.getElementById('envelope');
+    let isOpening = false;
 
-    function resizeCanvas() {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-      initStars();
-    }
+    envelope.addEventListener('click', () => {
+      if (isOpening) return;
+      isOpening = true;
 
-    function initStars() {
-      stars = [];
-      // Very sparse, quiet ambient stars (approx 24)
-      const starCount = Math.floor((width * height) / 32000);
-      for (let i = 0; i < Math.max(18, starCount); i++) {
-        stars.push({
-          x: Math.random() * width,
-          y: Math.random() * height,
-          size: Math.random() * 1.5 + 0.5,
-          alpha: Math.random() * 0.5 + 0.1,
-          baseAlpha: Math.random() * 0.4 + 0.1,
-          twinkleSpeed: Math.random() * 0.008 + 0.003,
-          isFourPoint: Math.random() < 0.25, // Few 4-point drawn stars
-          alive: true
-        });
-      }
-    }
+      // STEP 1: Lift
+      envelope.classList.add('lift');
 
-    function drawFourPointStar(ctx, cx, cy, spikes, outerRadius, innerRadius, color) {
-      let rot = Math.PI / 2 * 3;
-      let x = cx;
-      let y = cy;
-      let step = Math.PI / spikes;
-
-      ctx.beginPath();
-      ctx.moveTo(cx, cy - outerRadius);
-      for (let i = 0; i < spikes; i++) {
-        x = cx + Math.cos(rot) * outerRadius;
-        y = cy + Math.sin(rot) * outerRadius;
-        ctx.lineTo(x, y);
-        rot += step;
-
-        x = cx + Math.cos(rot) * innerRadius;
-        y = cy + Math.sin(rot) * innerRadius;
-        ctx.lineTo(x, y);
-        rot += step;
-      }
-      ctx.lineTo(cx, cy - outerRadius);
-      ctx.closePath();
-      ctx.fillStyle = color;
-      ctx.fill();
-    }
-
-    function renderCanvas() {
-      ctx.clearRect(0, 0, width, height);
-
-      stars.forEach(star => {
-        if (!star.alive) return;
-
-        // Slow, gentle breathing twinkle
-        star.alpha += star.twinkleSpeed;
-        if (star.alpha > 0.65 || star.alpha < 0.1) {
-          star.twinkleSpeed = -star.twinkleSpeed;
-        }
-
-        if (star.isFourPoint) {
-          drawFourPointStar(ctx, star.x, star.y, 4, star.size * 3, star.size * 0.8, `rgba(184, 205, 227, ${star.alpha})`);
-        } else {
-          ctx.beginPath();
-          ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(168, 163, 201, ${star.alpha})`;
-          ctx.fill();
-        }
-      });
-
-      requestAnimationFrame(renderCanvas);
-    }
-
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-    renderCanvas();
-
-    /* ==========================================================================
-       INTERACTIVE 6: CLICKABLE STARS (SECRET DISCOVERY)
-       ========================================================================== */
-    canvas.addEventListener('click', function(e) {
-      const rect = canvas.getBoundingClientRect();
-      const clickX = e.clientX - rect.left;
-      const clickY = e.clientY - rect.top;
-
-      // Check if clicked near any star
-      stars.forEach(star => {
-        const dist = Math.hypot(star.x - clickX, star.y - clickY);
-        if (dist < 25 && star.alive) {
-          // Sparkle highlight then fade away
-          star.alpha = 0.9;
-          star.size *= 1.8;
-          setTimeout(() => {
-            star.alive = false;
-          }, 300);
-        }
-      });
-    });
-
-    /* ==========================================================================
-       INTERACTIVE 5: MOUSE / TOUCH GLIMMER SHEEN
-       ========================================================================== */
-    const glimmer = document.getElementById('glimmer');
-    window.addEventListener('mousemove', (e) => {
-      glimmer.style.setProperty('--mouse-x', `${e.clientX}px`);
-      glimmer.style.setProperty('--mouse-y', `${e.clientY}px`);
-    });
-
-    window.addEventListener('touchmove', (e) => {
-      if (e.touches.length > 0) {
-        glimmer.style.setProperty('--mouse-x', `${e.touches[0].clientX}px`);
-        glimmer.style.setProperty('--mouse-y', `${e.touches[0].clientY}px`);
-      }
-    }, { passive: true });
-
-    /* ==========================================================================
-       INTERACTIVE 1 & 7: OPEN ENVELOPE / RESET SCENE
-       ========================================================================== */
-    const envelopeBox = document.getElementById('envelopeBox');
-    const sceneContainer = document.getElementById('sceneContainer');
-    let isOpen = false;
-
-    function openEnvelope() {
-      if (isOpen) return;
-      isOpen = true;
-
-      // Sequence:
-      // 1. Envelope wiggles slightly
-      envelopeBox.style.transform = "translateY(-2px) rotate(-1deg)";
-      
       setTimeout(() => {
-        // 2. Flap opens, seal fades
-        envelopeBox.classList.add('open');
+        // STEP 2 & 3: Open Flap & Unseal
+        envelope.classList.add('open');
       }, 300);
 
       setTimeout(() => {
-        // 3. Letter slides out and expands gracefully
-        sceneContainer.classList.add('opened');
-        
-        // 4. Subtle background pulse
-        stars.forEach(s => s.alpha = Math.min(0.8, s.alpha + 0.3));
+        // STEP 4 & 5: Extract Letter
+        envelope.classList.add('extracted');
       }, 900);
-    }
-
-    function resetScene() {
-      isOpen = false;
-      sceneContainer.classList.remove('opened');
-      envelopeBox.classList.remove('open');
-      envelopeBox.style.transform = "";
-    }
-
-    /* ==========================================================================
-       INTERACTIVE 2: IRIS FLOWER PETAL FALL
-       ========================================================================== */
-    let irisClickCount = 0;
-    const irisContainer = document.getElementById('irisContainer');
-    const petalsContainer = document.getElementById('petals-container');
-
-    function triggerIris(e) {
-      e.stopPropagation();
-      irisClickCount++;
-
-      // Sway motion
-      irisContainer.classList.remove('sway-animation');
-      void irisContainer.offsetWidth; // trigger reflow
-      irisContainer.classList.add('sway-animation');
-
-      if (irisClickCount >= 2) {
-        // Drop a soft white-pink petal
-        createFallingPetal(e.clientX, e.clientY);
-      }
-    }
-
-    function createFallingPetal(startX, startY) {
-      const petal = document.createElement('div');
-      petal.className = 'falling-petal';
-      
-      // Default to near flower if coordinates missing
-      const x = startX || (window.innerWidth / 2 - 80);
-      const y = startY || (window.innerHeight / 2 + 50);
-
-      petal.style.left = `${x}px`;
-      petal.style.top = `${y}px`;
-
-      petalsContainer.appendChild(petal);
-
-      // Clean up after animation finishes
-      setTimeout(() => {
-        petal.remove();
-      }, 6000);
-    }
-
-    /* ==========================================================================
-       INTERACTIVE 3: POSTMARK STAMP PRESS
-       ========================================================================== */
-    function triggerStamp(e) {
-      e.stopPropagation();
-      const secret = document.getElementById('stampSecret');
-      secret.classList.add('show');
 
       setTimeout(() => {
-        secret.classList.remove('show');
-      }, 1800);
-    }
-
-    /* ==========================================================================
-       INTERACTIVE 4: DATE DOUBLE-CLICK / QUICK TAP
-       ========================================================================== */
-    let lastDateTap = 0;
-    function triggerDate(element) {
-      const currentTime = new Date().getTime();
-      const tapGap = currentTime - lastDateTap;
-
-      if (tapGap < 350 && tapGap > 0) {
-        // Double tap / click detected
-        const dateText = document.getElementById('dateText');
-        const originalText = "09.30";
-        dateText.innerText = "♡ 09 · 30 ♡";
-        dateText.style.color = "var(--soft-violet)";
-
-        setTimeout(() => {
-          dateText.innerText = originalText;
-          dateText.style.color = "#4b5869";
-        }, 1200);
-      }
-      lastDateTap = currentTime;
-    }
+        // STEP 6, 7, 8: Expand Card & Dim Background
+        envelope.classList.add('expanded');
+      }, 1600);
+    });
   </script>
 </body>
 </html>
